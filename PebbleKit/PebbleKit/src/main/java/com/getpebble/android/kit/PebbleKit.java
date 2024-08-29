@@ -1,11 +1,13 @@
 package com.getpebble.android.kit;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 import com.getpebble.android.kit.Constants.*;
@@ -490,7 +492,11 @@ public final class PebbleKit {
         }
 
         IntentFilter filter = new IntentFilter(action);
-        context.registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            context.registerReceiver(receiver, filter);
+        }
         return receiver;
     }
 
@@ -852,7 +858,7 @@ public final class PebbleKit {
      * intent.
      *
      * To avoid leaking memory, activities registering BroadcastReceivers <em>must</em> unregister them in the
-     * Activity's {@link android.app.Activity#onPause()} method.
+     * Activity's {@link Activity#onPause()} method.
      *
      * @param context
      *         The context in which to register the BroadcastReceiver.
@@ -868,7 +874,11 @@ public final class PebbleKit {
         IntentFilter filter = new IntentFilter();
         filter.addAction(INTENT_DL_RECEIVE_DATA);
         filter.addAction(INTENT_DL_FINISH_SESSION);
-        context.registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            context.registerReceiver(receiver, filter);
+        }
 
         return receiver;
     }
