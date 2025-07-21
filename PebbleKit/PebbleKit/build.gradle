@@ -17,3 +17,10 @@ android {
 
 dependencies {
 }
+
+android.libraryVariants.all { variant ->
+    task("${variant.name}Javadoc", type: Javadoc) {
+        source = android.sourceSets.main.java.source
+        classpath += files(android.getBootClasspath())
+    }
+}
